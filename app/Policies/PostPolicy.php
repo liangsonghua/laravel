@@ -11,11 +11,11 @@ class PostPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view the post.
+     * Determine whether the user can show the view.
      */
-    public function view(UsersRepository $user, PostRepository $post)
+    public function show(UsersRepository $user, PostRepository $post)
     {
-        //
+        return true;
     }
 
     /**

@@ -47,6 +47,7 @@ class UsersRepository extends Authenticatable
 
     public function roles()
     {
+        //第三个参数是定义在关联中的模型外键名称，而第四个参数则是要合并的模型外键名称：
         return $this->belongsToMany(RolesRepository::class, 'user_roles', 'user_id', 'role_id');
     }
 

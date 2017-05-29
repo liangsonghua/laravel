@@ -11,14 +11,14 @@
 |
 */
 use App\Http\Middleware\BeforeMiddleWare;
-// Route::get('/login',function() {
-// 	return view('auth.login');
-// });
+use App\Http\Middleware\CheckRole;
 
-// Route::post('/loginCheck','Auth\LoginController@Check');
+Route::get('/',function(){
+	return view('welcome');
+});
 Route::get('/home', function () {
 	// return redirect()->Route('c');
-    return view('welcome');
+    return view('home');
 })->middleware(BeforeMiddleWare::class);
 
 Route::get('/current',function(){
@@ -28,9 +28,10 @@ Route::get('/current',function(){
 	return "a";
 })->name('c');
 
-// Route::get('/user/{id}','UserController@Show');
-
+Route::get('/user/{id}','UserController@Show')->middleware(CheckRole::class);
 Route::resource('user','UserController');
+
+
 Route::resource('project','ProjectController');
 Route::get('/cache',function() {
 	return Cache::get('key');
@@ -44,4 +45,3 @@ Route::get('/cache',function() {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
