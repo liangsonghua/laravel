@@ -12,10 +12,9 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Policies\Post;
 use Illuminate\Http\Respons;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 class FormController extends BaseController {
  
-     // 对应的模型
-     protected $model;
      
      //对应的控制器名(映射视图)
      protected $controller;
@@ -31,8 +30,10 @@ class FormController extends BaseController {
 
      public function __construct() {
           $this->middleware('auth');
-          $this->controller = $this->model;
-          $this->post = new Post(url()->current());
+          $action = Route::current()->getActionName();
+          $params = Route::current()->parameters();
+          list($class, $method) = explode('@', $action);
+          $this->post = new Post($class,$method,$params);
      }
 
      //使用容器注入的方法

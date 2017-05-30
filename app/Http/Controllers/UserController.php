@@ -7,7 +7,7 @@ class UserController extends FormController
 	
 	public function __construct(UsersRepository $users) 
 	{
-		  $this->model = 'User';
+		  $this->controller = 'User';
           $this->container = $users;
           parent::__construct();
 	}

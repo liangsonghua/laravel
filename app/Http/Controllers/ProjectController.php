@@ -8,7 +8,7 @@ class ProjectController extends FormController
  
      public function __construct(ProjectRepository $project)
      {
-          $this->model = 'project';
+          $this->controller = 'project';
           $this->container = $project;
           parent::__construct();
      }
