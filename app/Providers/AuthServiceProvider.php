@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Providers;
-use App\Repositories\PostRepository;
+// use App\Repositories\PostRepository;
 use App\Policies\PostPolicy;
+use App\Policies\Post;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use App\Repositories\UsersRepository;
@@ -14,7 +15,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        PostRepository::class =>PostPolicy::class,
+        Post::class =>PostPolicy::class,
     ];
 
     /**

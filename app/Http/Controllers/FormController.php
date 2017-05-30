@@ -8,7 +8,8 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use App\Repositories\PostRepository;
+// use App\Repositories\PostRepository;
+use App\Policies\Post;
 use Illuminate\Http\Respons;
 use Illuminate\Support\Facades\Auth;
 class FormController extends BaseController {
@@ -22,12 +23,16 @@ class FormController extends BaseController {
      //实例名
      protected $container;
 
+     //
+     //正在操作的资源实体，比如一篇文章或一个项目,不需要和数据库打交道
+     protected $post;
+
      use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
      public function __construct() {
           $this->middleware('auth');
           $this->controller = $this->model;
-
+          $this->post = new Post(url()->current());
      }
 
      //使用容器注入的方法
@@ -39,15 +44,15 @@ class FormController extends BaseController {
           return View::make($this->controller.'/index', array('models' => $models));
      }
 
-    public function show(PostRepository $post,$id)
+    public function show($id)
     {
         return view($this->controller.'/show', [$this->controller => $this->container->findOrFail($id)]);
      }
 
-     public function create(PostRepository $post) 
+     public function create() 
      {
 
-          if(Auth::user()->can('create',$post)) {
+          if(Auth::user()->can('create',$this->post)) {
             return View::make($this->controller.'/create');
           } else {
              return response('您没有权限，请联系管理员', 200)
