@@ -23,7 +23,8 @@ class PostPolicy
      */
     public function create(UsersRepository $user,Post $post)
     {
-        return $user->role==='root';
+        // return $user->role==='root';
+        return true;
     }
 
     /**

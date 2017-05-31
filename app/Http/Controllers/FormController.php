@@ -52,7 +52,6 @@ class FormController extends BaseController {
 
      public function create() 
      {
-
           if(Auth::user()->can('create',$this->post)) {
             return View::make($this->controller.'/create');
           } else {

@@ -30,9 +30,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // $this->app->bind('App\Repositories\UsersRepository',function() {
-        //     return new ProjectRepository();
-        // });
+       if (env('APP_DEBUG')) {
+           $this->app->register('VIACreative\SudoSu\ServiceProvider');
+       }
     
     }
 

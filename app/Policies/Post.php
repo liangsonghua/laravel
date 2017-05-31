@@ -12,7 +12,9 @@ class Post
 
 
 	public function __construct($class,$method,$params){
-		$this->controllerName = end(explode('\\', $class));
+		$c = explode("\\", $class);
+		// $this->controllerName = end(explode("\\", $class));
+		$this->controllerName = end($c);
 		$this->actionName = $method;
 		$this->params = $params;
 	}
