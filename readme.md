@@ -1,40 +1,160 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+**使用方法：**
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+所有的控制器继承App\Http\Controllers\FormController.php，同时在构造器时注入所操作的Model模型
 
-## About Laravel
+如
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+	 public function __construct(ProjectRepository $project)
+	 {
+          $this->controller = 'project';
+          $this->container = $project;
+          parent::__construct();
+ 	}   
+ 
+ 在App\Http\Controllers\FormController.php中使用builder完成CRUD功能，同时实例化了一个Post对象(正在操作的资源实体，比如一篇文章或一个项目,不需要和数据库打交道)，该post主要为权限授权服务。
+ 
+** 完整代码**
+     
+ 	<?php
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+	namespace App\Http\Controllers;
+	use Log;
+	use Illuminate\Http\Request;
+	use Illuminate\Support\Facades\View;
+	use Illuminate\Foundation\Bus\DispatchesJobs;
+	use Illuminate\Routing\Controller as BaseController;
+	use Illuminate\Foundation\Validation\ValidatesRequests;
+	use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+	// use App\Repositories\PostRepository;
+	use App\Policies\Post;
+	use Illuminate\Http\Respons;
+	use Illuminate\Support\Facades\Auth;
+	use Illuminate\Support\Facades\Route;
+	class FormController extends BaseController {
+ 
+     //对应的控制器名(映射视图)
+     protected $controller;
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
+     //实例名
+     protected $container;
 
-## Learning Laravel
+     //
+     //正在操作的资源实体，比如一篇文章或一个项目,不需要和数据库打交道
+     protected $post;
 
-Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is thorough, complete, and makes it a breeze to get started learning the framework.
+     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 900 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+     public function __construct() {
+          $this->middleware('auth');
+          $action = Route::current()->getActionName();
+          $params = Route::current()->parameters();
+          list($class, $method) = explode('@', $action);
+          $this->post = new Post($class,$method,$params);
+     }
 
-## Contributing
+     public function index()
+     {
+        
+          $builder = $this->container->orderBy('id', 'desc');
+          $models = $builder->paginate(10);
+          return View::make($this->controller.'/index', array('models' => $models));
+     }
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+    public function show($id)
+    {
+        return view($this->controller.'/show', [$this->controller => $this->container->findOrFail($id)]);
+     }
 
-## Security Vulnerabilities
+     public function create() 
+     {
+          if(Auth::user()->can('create',$this->post)) {
+            return View::make($this->controller.'/create');
+          } else {
+             return response('您没有权限，请联系管理员', 200)
+                  ->header('Content-Type', 'text/plain');
+          }
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+     }
 
-## License
+     public function store(Request $Request) 
+     {
+          $this->container->fill($Request->all());
+          $this->container->save();
+          return redirect()->action($this->controller.'Controller@index');
+     }
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+      public function edit($id)
+     {
+          $model = $this->container->find($id);
+          return View::make($this->controller.'/edit', compact('model'));
+     }
+ 
+     public function update(Request $Request,$id)
+     {
+          $model = $this->container->find($id);
+          $model->fill($Request->all());
+          $model->save();
+          return redirect()->action($this->controller.'Controller@index');
+     }
+ 
+     public function destroy($id)
+     {
+          $$this->container->destroy($id); 
+          return redirect()->action($this->controller.'Controller@index');
+     }
+
+	}
+	
+**授权策略**
+
+	<?php
+
+	namespace App\Policies;
+
+	use App\Repositories\UsersRepository;
+	// use App\Repositories\PostRepository;
+	use App\Policies\Post;
+	use Illuminate\Auth\Access\HandlesAuthorization;
+	class PostPolicy
+	{
+    	use HandlesAuthorization;
+
+    /**
+     * Determine whether the user can show the view.
+     */
+    public function show(UsersRepository $user, Post $post)
+    {
+        return true;
+    }
+
+    /**
+     * Determine whether the user can create posts.
+     */
+    public function create(UsersRepository $user,Post $post)
+    {
+        // return $user->role==='root';
+        return true;
+    }
+
+    /**
+     * Determine whether the user can update the post.
+     */
+    public function update(UsersRepository $user, Post $post)
+    {
+        return $user->role==='root';
+    }
+
+    /**
+     * Determine whether the user can delete the post.
+     */
+    public function delete(UsersRepository $user, Post $post)
+    {
+        return $user->role==='root';
+    }
+	}
+同时别忘了在App\ProvidersAuthServiceProvider中添加应用的策略映射
+
+	protected $policies = [
+		******
+        Post::class =>PostPolicy::class,
+    ];
