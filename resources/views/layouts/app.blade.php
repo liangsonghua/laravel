@@ -43,7 +43,7 @@
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     @if (config('app.debug'))
-    @include('sudosu::user-selector')
+    @includeif('sudosu::user-selector')
 @endif
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
