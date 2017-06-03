@@ -33,10 +33,12 @@ return [
         'pusher' => [
             'driver' => 'pusher',
             'key' => env('PUSHER_KEY'),
-            'secret' => env('PUSHER_SECRET'),
+            // 'secret' => null
+           'secret' => env('PUSHER_SECRET'),
             'app_id' => env('PUSHER_APP_ID'),
             'options' => [
-                //
+                // 'host' => 'localhost',
+                //  'port' => 6001,
             ],
         ],
 

@@ -23,11 +23,11 @@ class BroadcastServiceProvider extends ServiceProvider
         //     return (int) $user->id === (int) $userId;
         // });
 
-        
+        // require base_path('routes/channels.php');
         Broadcast::channel('douban.{channel_id}', function ($user, $channel_id) {
-            return true;
-            // var_dump($user->id === FocusRepository::findOrFail($channel_id)->user_id);
-            // return $user->id === FocusRepository::findOrFail($channel_id)->user_id;
+             echo "auth ok!";
+             return true;
+            return $user->id === FocusRepository::findOrFail($channel_id)->user_id;
         });
     }
 }

@@ -10,8 +10,10 @@
         "guzzlehttp/guzzle": "^6.2",
         "laravel/framework": "5.3.*",
         "overtrue/laravel-wechat": "~3.0",
+        "predis/predis": "^1.1",
         "pusher/pusher-php-server": "~2.0",
-        "viacreative/sudo-su": "^1.1"
+        "viacreative/sudo-su": "^1.1",
+        "vinkla/pusher": "^2.5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

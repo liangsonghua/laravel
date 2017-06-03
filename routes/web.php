@@ -42,6 +42,17 @@ Route::get('/cache',function() {
 // Route::patch($uri, $callback);
 // Route::delete($uri, $callback);
 // Route::options($uri, $callback);
+Route::get('/bridge', function() {
+    $pusher = \Illuminate\Support\Facades\App::make('pusher');
 
+    $pusher->trigger( 'test-channel',
+                      'test-event', 
+                      ['text' => 'I Love China!!!']
+                    );
+    return 'This is a Laravel Pusher Bridge Test!';
+});
+Route::post('/pusher/auth',function(){
+	return true;
+ });
 Auth::routes();
 

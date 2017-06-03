@@ -21,19 +21,12 @@ require('./bootstrap');
 //     }
 // </script>
 
-window.Pusher = require('pusher-js');
 import Echo from "laravel-echo"
 
 window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: '6ab827fb733f86beff8b'
+    broadcaster: 'socket.io',
+    host: 'http://app.dev:6001'
 });
-
-console.log(window.Echo.private('douban.1'));
-window.Echo.private('douban.1').listen('server.douban', function (data) {
-        console.log(data);
-    });
-
 Vue.component('example', require('./components/Example.vue'));
 
 const app = new Vue({

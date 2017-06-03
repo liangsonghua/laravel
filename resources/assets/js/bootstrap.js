@@ -43,3 +43,14 @@ Vue.http.interceptors.push((request, next) => {
 //     broadcaster: 'pusher',
 //     key: '6ab827fb733f86beff8b'
 // });
+
+// import Echo from "laravel-echo"
+
+// window.Echo = new Echo({
+//     broadcaster: 'socket.io',
+//     host: window.location.hostname + ':6001'
+// });
+
+// window.Echo.private('douban.1').listen('server.douban', (e) => {
+// 		console.log(e);
+// });
