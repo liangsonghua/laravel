@@ -39,10 +39,10 @@ class FormController extends BaseController {
      //使用容器注入的方法
      public function index()
      {
-          //过滤不属于自己拥有的分类，比如不列出角色为root的用户
-          $builder = $this->container->orderBy('id', 'desc');
-          $models = $builder->paginate(10);
-          return View::make($this->controller.'/index', array('models' => $models));
+          // $builder = $this->container->orderBy('id', 'desc');
+          // $models = $builder->paginate(10);
+          // return View::make($this->controller.'/index', array('models' => $models));
+      
      }
 
     public function show($id)

@@ -53,8 +53,9 @@ Route::get('/bridge', function() {
     return 'This is a Laravel Pusher Bridge Test!';
 });
 Route::post('/pusherAuth','PusherAuthController@check');
-Route::get('/focus',function() {
-	return view('user.focus');
-});
+Route::post('/addFocus','UserController@addfocus');
+// Route::get('/focus',function() {
+// 	return view('user.focus');
+// });
 Auth::routes();
 

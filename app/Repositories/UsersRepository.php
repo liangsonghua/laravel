@@ -45,6 +45,12 @@ class UsersRepository extends Authenticatable
     //     $this->attributes['password'] =  bcrypt($password);
     }
 
+     //该用户的关注模型
+    public function focus() 
+    {
+         return $this->hasMany(FocusRepository::class,'user_id');
+    }
+
     public function roles()
     {
         //第三个参数是定义在关联中的模型外键名称，而第四个参数则是要合并的模型外键名称：
