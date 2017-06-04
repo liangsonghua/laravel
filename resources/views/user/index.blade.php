@@ -15,10 +15,16 @@
    <script>
          Pusher.logToConsole = true;
         var pusher = new Pusher('6ab827fb733f86beff8b', {
-          encrypted: true
+            authEndpoint:'/pusherAuth',
+            auth: {
+                headers: {
+                  'X-CSRF-Token': '<?php echo csrf_token(); ?>'
+                }
+          },
+            encrypted: true
         });
 
-        var channel = pusher.subscribe('douban.1');
+        var channel = pusher.subscribe('private-douban.1');
         channel.bind('server.douabn', function(data) {
           console.log(data);
         });

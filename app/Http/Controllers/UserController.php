@@ -12,6 +12,11 @@ class UserController extends FormController
           parent::__construct();
 	}
 
+	public function focus()
+	{
+		
+	}
+
 
 }
 

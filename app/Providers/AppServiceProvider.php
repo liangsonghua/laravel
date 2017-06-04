@@ -30,13 +30,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-       if (env('APP_DEBUG')) {
-           $this->app->register('VIACreative\SudoSu\ServiceProvider');
+       if (env('APP_DEBUG')) 
+       {
+           $this->app->register('VIACreative\SudoSu\ServiceProvider'); 
+       }
+       if(env('BROADCAST_DRIVER')==='pusher')
+       {
+          $this->app->register('Vinkla\Pusher\PusherServiceProvider');
 
        }
-       if(env('BROADCAST_DRIVER')==='pusher'){
-           $this->app->register('Vinkla\Pusher\PusherServiceProvider');
-        }
     
     }
 

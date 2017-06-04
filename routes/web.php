@@ -12,7 +12,8 @@
 */
 use App\Http\Middleware\BeforeMiddleWare;
 use App\Http\Middleware\CheckRole;
-
+// use Illuminate\Http\Request;
+// use Illuminate\Http\Respons;
 Route::get('/',function(){
 	return view('welcome');
 });
@@ -51,8 +52,9 @@ Route::get('/bridge', function() {
                     );
     return 'This is a Laravel Pusher Bridge Test!';
 });
-Route::post('/pusher/auth',function(){
-	return true;
- });
+Route::post('/pusherAuth','PusherAuthController@check');
+Route::get('/focus',function() {
+	return view('user.focus');
+});
 Auth::routes();
 

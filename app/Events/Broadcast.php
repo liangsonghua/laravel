@@ -29,8 +29,8 @@ class Broadcast implements ShouldBroadcast
     //返回事件将要广播的频道
     public function broadcastOn() 
     {  	
-    	// return new PrivateChannel("douban.".$this->douban->channel_id);
-        return 'douban.1';
+    	return new PrivateChannel("douban.".$this->douban->channel_id);
+        // return 'douban.1';
     }
 
 	// 指定广播数据,不指定则public属性都被广播
