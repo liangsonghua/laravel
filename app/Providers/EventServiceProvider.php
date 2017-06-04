@@ -21,9 +21,9 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\SqlListener',
         ],
 
-        'App\Events\Broadcast'=>[
-            'App\Listeners\BroadCastListener'
-        ],
+        // 'App\Events\Broadcast'=>[
+        //     'App\Listeners\BroadCastListener'
+        // ],
     ];
 
     /**

@@ -25,7 +25,7 @@ import Echo from "laravel-echo"
 
 window.Echo = new Echo({
     broadcaster: 'socket.io',
-    host: 'http://app.dev:6001'
+    host: 'http://localhost:6001'
 });
 Vue.component('example', require('./components/Example.vue'));
 
